@@ -35,8 +35,27 @@ def extract_cbz(comic_path, output_dir):
         archive.extractall(output_dir)
 
 
-def extract_cbr(input_file: Path, output_dir: Path):
-    seven_zip = r"C:\Program Files\7-Zip\7z.exe"
+def extract_cbr(input_file, output_dir):
+    import shutil
+
+    # Busca automáticamente 7-Zip según el sistema operativo
+    seven_zip = (
+        shutil.which("7z")
+        or shutil.which("7zz")
+        or shutil.which("7za")
+    )
+
+    # Si estamos en Windows y no está en PATH
+    if not seven_zip:
+        windows_7zip = r"C:\Program Files\7-Zip\7z.exe"
+
+        if Path(windows_7zip).exists():
+            seven_zip = windows_7zip
+
+    if not seven_zip:
+        raise RuntimeError(
+            "No se encontró 7-Zip en el sistema."
+        )
 
     subprocess.run(
         [

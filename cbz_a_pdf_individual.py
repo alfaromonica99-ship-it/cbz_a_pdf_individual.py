@@ -8,6 +8,8 @@ import img2pdf
 import subprocess
 from PIL import Image
 
+#Abrir zip streamlit
+
 import shutil
 
 IMAGE_EXTENSIONS = {

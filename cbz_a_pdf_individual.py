@@ -8,6 +8,9 @@ import img2pdf
 import subprocess
 from PIL import Image
 
+#PARA WINRAR EN STREAMLIT
+import shutil
+
 
 IMAGE_EXTENSIONS = {
     ".jpg",
@@ -32,8 +35,45 @@ def extract_cbz(comic_path, output_dir):
         archive.extractall(output_dir)
 
 
-def extract_cbr(input_file: Path, output_dir: Path):
-    seven_zip = r"C:\Program Files\7-Zip\7z.exe"
+
+# PARA INSTALACION LOCAL PARA ABRIR WINRAR
+
+#def extract_cbr(input_file: Path, output_dir: Path):
+#    seven_zip = r"C:\Program Files\7-Zip\7z.exe"
+#
+#    subprocess.run(
+#        [
+#            seven_zip,
+#            "x",
+#            str(input_file),
+#            f"-o{output_dir}",
+#            "-y"
+#        ],
+#        check=True
+#    )
+
+
+def extract_cbr(input_file, output_dir):
+    import shutil
+
+    # Busca automáticamente 7-Zip según el sistema operativo
+    seven_zip = (
+        shutil.which("7z")
+        or shutil.which("7zz")
+        or shutil.which("7za")
+    )
+
+    # Si estamos en Windows y no está en PATH
+    if not seven_zip:
+        windows_7zip = r"C:\Program Files\7-Zip\7z.exe"
+
+        if Path(windows_7zip).exists():
+            seven_zip = windows_7zip
+
+    if not seven_zip:
+        raise RuntimeError(
+            "No se encontró 7-Zip en el sistema."
+        )
 
     subprocess.run(
         [
@@ -45,6 +85,13 @@ def extract_cbr(input_file: Path, output_dir: Path):
         ],
         check=True
     )
+
+
+
+
+
+
+#ZIP EN STREAMLIT
 
 
 def find_images(folder):

@@ -8,6 +8,7 @@ import img2pdf
 import subprocess
 from PIL import Image
 
+import shutil
 
 IMAGE_EXTENSIONS = {
     ".jpg",
